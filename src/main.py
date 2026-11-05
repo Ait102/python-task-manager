@@ -3,9 +3,31 @@
 tasks = []
 
 
+def validate_title(title):
+    """Проверяет название задачи и возвращает его без лишних пробелов."""
+    if not isinstance(title, str) or not title.strip():
+        raise ValueError("Название задачи не может быть пустым")
+    if len(title.strip()) > 100:
+        raise ValueError("Название задачи длиннее 100 символов")
+    return title.strip()
+
+
+def parse_task_id(value):
+    """Преобразует ввод пользователя в номер задачи (целое число > 0)."""
+    try:
+        task_id = int(str(value).strip())
+    except ValueError:
+        raise ValueError("Номер задачи должен быть целым числом") from None
+    if task_id <= 0:
+        raise ValueError("Номер задачи должен быть больше нуля")
+    return task_id
+
+
 def add_task(title):
     """Добавляет задачу и возвращает её."""
-    task = {"id": len(tasks) + 1, "title": title, "done": False}
+    title = validate_title(title)
+    task_id = max((t["id"] for t in tasks), default=0) + 1
+    task = {"id": task_id, "title": title, "done": False}
     tasks.append(task)
     return task
 
