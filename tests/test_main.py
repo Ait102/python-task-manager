@@ -36,3 +36,10 @@ def test_delete_task():
     assert main.delete_task(1) is True
     assert main.list_tasks() == []
     assert main.delete_task(1) is False
+
+
+def test_get_stats():
+    main.add_task("A")
+    main.add_task("B")
+    main.complete_task(1)
+    assert main.get_stats() == {"total": 2, "done": 1, "left": 1}

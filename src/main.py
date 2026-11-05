@@ -33,6 +33,12 @@ def delete_task(task_id):
     return False
 
 
+def get_stats():
+    """Возвращает статистику: всего задач, выполнено, осталось."""
+    done = sum(1 for task in tasks if task["done"])
+    return {"total": len(tasks), "done": done, "left": len(tasks) - done}
+
+
 def format_task(task):
     mark = "x" if task["done"] else " "
     return f"[{mark}] {task['id']}. {task['title']}"
@@ -44,6 +50,8 @@ def main():
     complete_task(1)
     for task in list_tasks():
         print(format_task(task))
+    stats = get_stats()
+    print(f"Всего: {stats['total']}, выполнено: {stats['done']}, осталось: {stats['left']}")
 
 
 if __name__ == "__main__":
