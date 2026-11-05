@@ -69,6 +69,11 @@ def search_tasks(query):
     return [task for task in tasks if query in task["title"].lower()]
 
 
+def filter_tasks(done):
+    """Возвращает выполненные (done=True) или невыполненные (done=False) задачи."""
+    return [task for task in tasks if task["done"] is done]
+
+
 def format_task(task):
     mark = "x" if task["done"] else " "
     return f"[{mark}] {task['id']}. {task['title']}"

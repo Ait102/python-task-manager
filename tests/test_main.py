@@ -79,3 +79,11 @@ def test_search_tasks():
     main.add_task("купить хлеб")
     assert [t["id"] for t in main.search_tasks("КУПИТЬ")] == [1, 3]
     assert main.search_tasks("нет такого") == []
+
+
+def test_filter_tasks():
+    main.add_task("A")
+    main.add_task("B")
+    main.complete_task(2)
+    assert [t["id"] for t in main.filter_tasks(True)] == [2]
+    assert [t["id"] for t in main.filter_tasks(False)] == [1]
