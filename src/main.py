@@ -38,12 +38,37 @@ def format_task(task):
     return f"[{mark}] {task['id']}. {task['title']}"
 
 
+MENU = """
+=== Менеджер задач ===
+1. Добавить задачу
+2. Показать задачи
+3. Отметить выполненной
+4. Удалить задачу
+0. Выход
+"""
+
+
 def main():
-    add_task("Изучить git branch")
-    add_task("Сделать лабораторную работу")
-    complete_task(1)
-    for task in list_tasks():
-        print(format_task(task))
+    while True:
+        print(MENU)
+        choice = input("Выберите пункт: ").strip()
+        if choice == "1":
+            task = add_task(input("Название задачи: ").strip())
+            print(f"Добавлено: {format_task(task)}")
+        elif choice == "2":
+            if not tasks:
+                print("Список задач пуст.")
+            for task in list_tasks():
+                print(format_task(task))
+        elif choice in ("3", "4"):
+            task_id = int(input("Номер задачи: "))
+            action = complete_task if choice == "3" else delete_task
+            print("Готово." if action(task_id) else "Задача не найдена.")
+        elif choice == "0":
+            print("До свидания!")
+            break
+        else:
+            print("Неизвестный пункт меню.")
 
 
 if __name__ == "__main__":
