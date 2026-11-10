@@ -15,6 +15,22 @@
 python src/main.py
 ```
 
+## Структура проекта
+
+```
+python-task-manager/
+├── src/main.py          # код программы
+├── tests/test_main.py   # тесты pytest
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
+
+## Ветки
+
+- `main` — стабильная версия;
+- `feature/*` — разработка отдельных функций, вливаются в `main` через merge.
+
 ## Тесты
 
 ```bash
