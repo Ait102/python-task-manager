@@ -87,3 +87,35 @@ def test_filter_tasks():
     main.complete_task(2)
     assert [t["id"] for t in main.filter_tasks(True)] == [2]
     assert [t["id"] for t in main.filter_tasks(False)] == [1]
+
+
+def test_save_and_load(tmp_path):
+    path = tmp_path / "tasks.json"
+    main.add_task("Сохранить меня")
+    main.complete_task(1)
+    main.save_tasks(path)
+    main.tasks.clear()
+    main.load_tasks(path)
+    assert main.list_tasks() == [{"id": 1, "title": "Сохранить меня", "done": True}]
+
+
+def test_load_missing_or_broken_file(tmp_path):
+    main.add_task("A")
+    main.load_tasks(tmp_path / "nope.json")
+    assert main.list_tasks() == []
+    bad = tmp_path / "bad.json"
+    bad.write_text("{not json", encoding="utf-8")
+    main.load_tasks(bad)
+    assert main.list_tasks() == []
+
+
+def test_menu_handles_bad_input(monkeypatch, capsys):
+    answers = iter(["1", "   ", "3", "abc", "1", "Купить хлеб", "7", "0"])
+    monkeypatch.setattr("builtins.input", lambda prompt="": next(answers))
+    monkeypatch.setattr(main, "save_tasks", lambda path=None: None)
+    monkeypatch.setattr(main, "load_tasks", lambda path=None: None)
+    main.main()
+    out = capsys.readouterr().out
+    assert "Ошибка: Название задачи не может быть пустым" in out
+    assert "Ошибка: Номер задачи должен быть целым числом" in out
+    assert "Всего: 1, выполнено: 0, осталось: 1" in out
