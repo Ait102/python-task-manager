@@ -63,6 +63,17 @@ def get_stats():
     return {"total": len(tasks), "done": done, "left": len(tasks) - done}
 
 
+def search_tasks(query):
+    """Ищет задачи, в названии которых есть строка query (без учёта регистра)."""
+    query = query.strip().lower()
+    return [task for task in tasks if query in task["title"].lower()]
+
+
+def filter_tasks(done):
+    """Возвращает выполненные (done=True) или невыполненные (done=False) задачи."""
+    return [task for task in tasks if task["done"] is done]
+
+
 def format_task(task):
     mark = "x" if task["done"] else " "
     return f"[{mark}] {task['id']}. {task['title']}"
